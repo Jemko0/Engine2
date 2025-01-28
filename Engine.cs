@@ -22,8 +22,9 @@ namespace Engine2
             Frame.StartDeltaCapture();
             objectManager.UpdateObjects();
             Invalidate();
+            FPSDisplay.Text = (Frame.deltaTime).ToString();
+            Thread.Sleep(4);
             Frame.EndDeltaCapture();
-            FPSDisplay.Text = (1 / Frame.deltaTime).ToString();
         }
 
         private void EngineInit(object sender, EventArgs e)
@@ -33,10 +34,6 @@ namespace Engine2
             //TEST PURPOSES
             ECharacter char2 = new ECharacter();
             EInstance.Create<ECharacter>(new ECharacter());
-            EInstance.Create<ECharacter>(char2);
-            char2.SetLocation(new FVector(-100, 0));
-            char2.Transform.Scale = new FVector(10, 10);
-            char2.Velocity = new FVector(1500, 0);
         }
 
         private void Engine_Paint(object sender, PaintEventArgs e)

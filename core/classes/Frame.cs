@@ -17,7 +17,7 @@ namespace Engine2.core.classes
         {
             end = DateTime.Now;
             DeltaCaptureResult result = new DeltaCaptureResult();
-            result.Delta = (float)((TimeSpan)(end - start)).TotalSeconds;
+            result.Delta = (float)(end - start).TotalMilliseconds;
             result.FPS = (int)(1 / result.Delta);
             deltaTime = result.Delta;
             fps = result.FPS;

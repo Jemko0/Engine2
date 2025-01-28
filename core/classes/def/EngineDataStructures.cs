@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Engine2.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -79,11 +80,35 @@ namespace Engine2.DataStructures
             left.y *= right;
             return left;
         }
+
+        public static FVector operator *(float left, FVector right)
+        {
+            right.x *= left;
+            right.y *= left;
+            return right;
+        }
+
+        public static float Dot(FVector a, FVector b)
+        {
+            return a.x * b.x + a.y * b.y;
+        }
+
+        public float Dot(FVector other)
+        {
+            return x * other.x + y * other.y;
+        }
     }
 
     public struct DeltaCaptureResult
     {
         public float Delta;
         public int FPS;
+    }
+    public struct SweptAABBResult
+    {
+        public bool Collision;      // Whether a collision occurred
+        public float CollisionTime; // Time of collision (0-1)
+        public FVector Normal;      // Normal of the collision surface
+        public EEntity HitEntity;   // The entity we collided with
     }
 }
