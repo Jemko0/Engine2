@@ -1,9 +1,8 @@
 using Engine2.core.classes;
 using Engine2.core.classes.objects;
-using Engine2.core.classes.objects.entities;
 using Engine2.core.classes.objects.rendering;
-using Engine2.core.interfaces;
-using System.Runtime.Serialization;
+using Engine2.DataStructures;
+using Engine2.Entities;
 
 namespace Engine2
 {
@@ -20,15 +19,24 @@ namespace Engine2
 
         private void TickEngine(object? sender, EventArgs e)
         {
+            Frame.StartDeltaCapture();
             objectManager.UpdateObjects();
-            System.Diagnostics.Debug.WriteLine("tick");
             Invalidate();
+            Frame.EndDeltaCapture();
+            FPSDisplay.Text = (1 / Frame.deltaTime).ToString();
         }
 
         private void EngineInit(object sender, EventArgs e)
         {
             Camera = new();
-            EInstance.New(new EEntity());
+
+            //TEST PURPOSES
+            ECharacter char2 = new ECharacter();
+            EInstance.Create<ECharacter>(new ECharacter());
+            EInstance.Create<ECharacter>(char2);
+            char2.SetLocation(new FVector(-100, 0));
+            char2.Transform.Scale = new FVector(10, 10);
+            char2.Velocity = new FVector(1500, 0);
         }
 
         private void Engine_Paint(object sender, PaintEventArgs e)
@@ -63,6 +71,15 @@ namespace Engine2
                 Camera.position.y -= 5;
             }
 
+            if (e.KeyCode == Keys.Add)
+            {
+                Camera.zoom *= 1.1f;
+            }
+
+            if (e.KeyCode == Keys.Subtract)
+            {
+                Camera.zoom *= 0.9f;
+            }
         }
     }
 }

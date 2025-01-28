@@ -51,9 +51,13 @@ namespace Engine2.core.classes
 
     public static class EInstance
     {
-        public static void New(EObject newObject)
+        /// <summary>
+        /// Instantiates a new <see cref="EObject"/>
+        /// </summary>
+        public static T Create<T>(EObject newObject) where T : EObject
         {
             ObjectManager.RegisterObject(newObject);
+            return newObject as T;
         }
     }
 }

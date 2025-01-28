@@ -28,21 +28,37 @@
         /// </summary>
         private void InitializeComponent()
         {
+            FPSDisplay = new Label();
             SuspendLayout();
+            // 
+            // FPSDisplay
+            // 
+            FPSDisplay.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            FPSDisplay.AutoSize = true;
+            FPSDisplay.Location = new Point(710, 401);
+            FPSDisplay.Name = "FPSDisplay";
+            FPSDisplay.Size = new Size(50, 20);
+            FPSDisplay.TabIndex = 0;
+            FPSDisplay.Text = "label1";
             // 
             // Engine
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(FPSDisplay);
+            DoubleBuffered = true;
             Name = "Engine";
             Text = "Form1";
             Load += EngineInit;
             Paint += Engine_Paint;
             PreviewKeyDown += Engine_PreviewKeyDown;
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
+
+        private Label FPSDisplay;
     }
 }

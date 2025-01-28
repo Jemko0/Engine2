@@ -5,8 +5,7 @@ namespace Engine2
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
-        static bool running;
-        static int test;
+        static Engine? engine;
         [STAThread]
 
         static void Main()
@@ -15,8 +14,13 @@ namespace Engine2
             // see https://aka.ms/applicationconfiguration.
 
             ApplicationConfiguration.Initialize();
-            Engine engine = new Engine();
+            engine = new Engine();
             Application.Run(engine);
+        }
+
+        public static Engine getEngine()
+        {
+            return engine;
         }
     }
 }

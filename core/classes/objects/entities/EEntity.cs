@@ -1,12 +1,8 @@
-﻿using Engine2.core.classes.objects.rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.Xml;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Engine2.DataStructures;
+using Engine2.core.classes.objects.rendering;
+using Engine2.core.classes.objects;
 
-namespace Engine2.core.classes.objects.entities
+namespace Engine2.Entities
 {
 
     /// <summary>
@@ -16,26 +12,35 @@ namespace Engine2.core.classes.objects.entities
     {
         public FTransform Transform = new FTransform();
         public bool rendering = true;
+
         public EEntity() : base()
         {
-            Transform.Translation = new FVector(10.0f, -10.0f);
+            Transform.Translation = new FVector(0.0f, 0.0f);
             Transform.Scale = new FVector(100.0f, 100.0f);
         }
+
         public override void Render(Graphics g)
         {
-            Pen pen = new Pen(Color.Black);
+            SolidBrush brush = new SolidBrush(Color.Red);
             if(rendering)
             {
                 FTransform RenderTransform;
                 RenderTransform = URenderer.GetTransformed(Transform.Translation, 0, Transform.Scale);
                 Rectangle rectEquivTransform = Rectangle.FromLTRB((int)RenderTransform.Translation.x, (int)RenderTransform.Translation.y, (int)RenderTransform.Translation.x + (int)RenderTransform.Scale.x, (int)RenderTransform.Translation.y + (int)RenderTransform.Scale.y);
-                g.DrawRectangle(pen, rectEquivTransform);
+                g.FillRectangle(brush, rectEquivTransform);
             }
         }
 
         public override void UpdateObject()
         {
             base.UpdateObject();
+        }
+
+        //basic
+
+        public void SetLocation(FVector Location)
+        {
+            Transform.Translation = Location;
         }
     }
 }
