@@ -98,13 +98,24 @@ namespace Engine2.DataStructures
         {
             return x * other.x + y * other.y;
         }
+
+        public static FVector Zero => new FVector(0, 0);
+    }
+
+    public struct IVector
+    {
+        public int x, y;
+        public IVector(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
     }
 
     public struct DeltaCaptureResult
     {
         public float DeltaMS;
-        public float DeltaS;
-        public int FPS;
+        public double FPS;
     }
     public struct SweptAABBResult
     {
@@ -133,5 +144,17 @@ namespace Engine2.DataStructures
             return other.key == key && other.value == value;
         }
     }
+
+    #region TILES AND WORLD
+    public enum TileTypes
+    {
+        None = 0,
+        Dirt = 1,
+    }
+    public struct Tile
+    {
+        public TileTypes type;
+    }
+    #endregion
 
 }

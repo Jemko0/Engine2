@@ -12,7 +12,7 @@ namespace Engine2.Entities
     public class ECharacter : EEntity, IInputInterface
     {
         public FVector Velocity;
-
+        public bool Colliding = true;
         public ECharacter()
         {
             SetDefaults();
@@ -206,13 +206,16 @@ namespace Engine2.Entities
             // intended movement
             FVector movement = Velocity * Frame.deltaTime;
 
-            foreach (ECharacter entity in ObjectManager.renderingObjects)
+            for(int i = 0; i < ObjectManager.renderingObjects.Count; i++) 
             {
+                ECharacter entity = ObjectManager.renderingObjects[i] as ECharacter;
+
+                if (entity == null) continue;
                 if (entity == this) continue;
 
                 SweptAABBResult sweep = SweptAABB(entity, Frame.deltaTime);
                 lastSweep = sweep;
-
+                if (!Colliding) break;
                 if (sweep.Collision)
                 {
                     // Move only up to the collision

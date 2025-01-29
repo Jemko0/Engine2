@@ -39,7 +39,6 @@ namespace Engine2.Entities
             else
             {
                 Velocity.x = LR * maxWalkSpeed;
-                //Velocity.y = UD * maxWalkSpeed;
             }
         }
 

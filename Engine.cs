@@ -3,6 +3,7 @@ using Engine2.core.classes.lookupTables;
 using Engine2.Object;
 using Engine2.Rendering;
 using Engine2.Entities;
+using Engine2.World;
 
 namespace Engine2
 {
@@ -18,6 +19,7 @@ namespace Engine2
         {
             InitializeComponent();
             Application.Idle += TickEngine;
+            EWorld d = new EWorld(10);
         }
 
         public void Init()
@@ -36,14 +38,16 @@ namespace Engine2
             objectManager.UpdateObjects();
             UpdateDebugText();
             Invalidate();
-            //Thread.Sleep(1);
+#if !RELEASE
+            Thread.Sleep(8);
+#endif
             Frame.EndDeltaCapture();
         }
 
         private void UpdateDebugText()
         {
             axestxt.Text = string.Join(", ", heldKeys.ToArray());
-            FPSDisplay.Text = "Delta: " + Frame.deltaTime.ToString() + "\n" + "FPS: " + Frame.fps.ToString();
+            FPSDisplay.Text = "Delta: " + Frame.deltaTime.ToString() + "\n" + "FPS: " + ((int)Frame.fps).ToString();
         }
 
         private void EngineInit(object sender, EventArgs e)
@@ -51,12 +55,12 @@ namespace Engine2
             //TEST PURPOSES
             ECharacter char2 = EInstance.Create<ECharacter>(new ECharacter());
             char2.brush = new SolidBrush(Color.HotPink);
-            char2.Transform.Scale = new DataStructures.FVector(50, 40);
-            char2.Transform.Translation = new DataStructures.FVector(40, 0);
+            char2.Transform.Scale = new DataStructures.FVector(500, 40);
+            char2.Transform.Translation = new DataStructures.FVector(-100, 0);
 
-            ECharacter char3 = EInstance.Create<ECharacter>(new ECharacter());
+            /*ECharacter char3 = EInstance.Create<ECharacter>(new ECharacter());
             char3.Transform.Scale = new DataStructures.FVector(50, 50);
-            char3.Transform.Translation = new DataStructures.FVector(0, 0);
+            char3.Transform.Translation = new DataStructures.FVector(0, 0);*/
         }
 
         private void Engine_Paint(object sender, PaintEventArgs e)

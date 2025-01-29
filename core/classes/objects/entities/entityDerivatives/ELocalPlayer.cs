@@ -6,6 +6,7 @@ namespace Engine2.Entities
 {
     public class ELocalPlayer : EPawn
     {
+        bool debugMovement = false;
         public ELocalPlayer()
         {
             Transform.Translation = new FVector(0, 100);
@@ -23,6 +24,16 @@ namespace Engine2.Entities
         {
             LR = GlobalLookup.KeyMappings.GetAxis("axisMoveLR");
             UD = GlobalLookup.KeyMappings.GetAxis("axisMoveUD");
+            if(debugMovement)
+            {
+                Velocity.x = float.Clamp(Velocity.x + LR * maxWalkSpeed, -maxWalkSpeed * 2, maxWalkSpeed * 2);
+                Velocity.y = float.Clamp(Velocity.y + UD * maxWalkSpeed, -maxWalkSpeed * 2, maxWalkSpeed * 2);
+                if (LR == 0.0 && UD == 0.0)
+                {
+                    Velocity = FVector.Zero;
+                }
+                return;
+            }
             base.Movement();
         }
 
@@ -35,6 +46,13 @@ namespace Engine2.Entities
                     Jump();
                 }
             }
+#if !RELEASE
+            if (keyVal == Keys.G)
+            {
+                debugMovement = !debugMovement;
+                Colliding = !debugMovement;
+            }
+#endif
         }
     }
 }
