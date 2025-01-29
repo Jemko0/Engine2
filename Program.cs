@@ -15,6 +15,7 @@ namespace Engine2
 
             ApplicationConfiguration.Initialize();
             engine = new Engine();
+            engine.Init();
             Application.Run(engine);
         }
 

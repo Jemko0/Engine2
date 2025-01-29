@@ -1,8 +1,11 @@
-﻿using Engine2.Entities;
+﻿using Engine2.core.classes.lookupTables;
+using Engine2.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Engine2.core.classes.objects.controller
@@ -13,7 +16,18 @@ namespace Engine2.core.classes.objects.controller
 
         public EPlayerController() : base()
         {
+            //bind to self
             Program.getEngine().KeyDown += PCKeyDown;
+        }
+
+        public override void UpdateObject()
+        {
+            CheckAxisKeys();
+        }
+
+        public void CheckAxisKeys(Keys currentKey)
+        {
+
         }
 
         private void PCKeyDown(object? sender, KeyEventArgs e)

@@ -13,5 +13,11 @@ namespace Engine2.Entities
         {
             Transform.Scale = new FVector(20, 50);
         }
+
+        public override void AxisInput(string id, FVector axisVal)
+        {
+            
+        }
+
     }
 }

@@ -171,12 +171,12 @@ namespace Engine2.Entities
             return Velocity - FVector.Dot(Velocity, normal) * normal;
         }
 
-        public void AxisInput(string id, FVector axisVal)
+        public virtual void AxisInput(string id, FVector axisVal)
         {
             throw new NotImplementedException();
         }
 
-        public void KeyInput(Keys keyVal)
+        public virtual void KeyInput(Keys keyVal)
         {
             throw new NotImplementedException();
         }

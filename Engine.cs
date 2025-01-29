@@ -1,20 +1,30 @@
 using Engine2.core.classes;
+using Engine2.core.classes.lookupTables;
 using Engine2.core.classes.objects;
+using Engine2.core.classes.objects.controller;
 using Engine2.core.classes.objects.rendering;
-using Engine2.DataStructures;
 using Engine2.Entities;
 
 namespace Engine2
 {
     public partial class Engine : Form
     {
-        private core.classes.ObjectManager objectManager = new core.classes.ObjectManager();
+        private ObjectManager objectManager = new ObjectManager();
         private Renderer Renderer = new();
         public static Camera? Camera;
+        public EPlayerController PlayerController;
+        public List<Keys> heldKeys = new List<Keys>();
         public Engine()
         {
             InitializeComponent();
             Application.Idle += TickEngine;
+        }
+
+        public void Init()
+        {
+            GlobalLookup.KeyMappingsLookup.Init();
+            PlayerController = new EPlayerController();
+            PlayerController.Posess(new ELocalPlayer());
         }
 
         private void TickEngine(object? sender, EventArgs e)
@@ -22,6 +32,7 @@ namespace Engine2
             Frame.StartDeltaCapture();
             objectManager.UpdateObjects();
             Invalidate();
+
             FPSDisplay.Text = (Frame.deltaTime).ToString();
             Thread.Sleep(4);
             Frame.EndDeltaCapture();
