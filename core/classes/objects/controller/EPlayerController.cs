@@ -6,16 +6,37 @@ namespace Engine2.Object
     public class EPlayerController : EObject
     {
         int posessedCharacter;
-
+        List<Keys> launchedKeys = new List<Keys>();
         public EPlayerController() : base()
         {
-            //bind to self
-            Program.getEngine().KeyDown += PCKeyDown;
+            Program.getEngine().KeyUp += PCKeyUp;
+        }
+
+        private void PCKeyUp(object? sender, KeyEventArgs e)
+        {
+            launchedKeys.Remove(e.KeyCode);
         }
 
         public override void UpdateObject()
         {
             CheckAxisKeys(Program.getEngine().heldKeys);
+            CheckInputKeys(Program.getEngine().heldKeys);
+        }
+
+        public void CheckInputKeys(List<Keys> keys)
+        {
+            if (GetPosessedCharacter() != null)
+            {
+                foreach (Keys key in keys)
+                {
+                    if(!launchedKeys.Contains(key))
+                    {
+                        launchedKeys.Add(key);
+                        GetPosessedCharacter().KeyInput(key);
+                    }
+                }
+            }
+            //System.Diagnostics.Debug.WriteLine(string.Join(':', launchedKeys));
         }
 
         public void CheckAxisKeys(List<Keys> currentKeys)
@@ -28,19 +49,6 @@ namespace Engine2.Object
                     GetPosessedCharacter().AxisInput(axis);
                 }
             }
-        }
-
-        private void PCKeyDown(object? sender, KeyEventArgs e)
-        {
-            if(GetPosessedCharacter() != null)
-            {
-                GetPosessedCharacter().KeyInput(e.KeyCode);
-            }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine("NO POSESSED CHARACTER >> PCKeyDown(object? sender, KeyEventArgs e)");
-            }
-            
         }
 
         public void Posess(ECharacter c)

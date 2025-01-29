@@ -1,6 +1,5 @@
 using Engine2.core.classes;
 using Engine2.core.classes.lookupTables;
-using Engine2.core.classes.objects;
 using Engine2.Object;
 using Engine2.Rendering;
 using Engine2.Entities;
@@ -37,7 +36,7 @@ namespace Engine2
             objectManager.UpdateObjects();
             UpdateDebugText();
             Invalidate();
-            Thread.Sleep(1);
+            //Thread.Sleep(1);
             Frame.EndDeltaCapture();
         }
 
@@ -51,8 +50,9 @@ namespace Engine2
         {
             //TEST PURPOSES
             ECharacter char2 = EInstance.Create<ECharacter>(new ECharacter());
+            char2.brush = new SolidBrush(Color.HotPink);
             char2.Transform.Scale = new DataStructures.FVector(50, 40);
-            char2.Transform.Translation = new DataStructures.FVector(60, 0);
+            char2.Transform.Translation = new DataStructures.FVector(40, 0);
 
             ECharacter char3 = EInstance.Create<ECharacter>(new ECharacter());
             char3.Transform.Scale = new DataStructures.FVector(50, 50);

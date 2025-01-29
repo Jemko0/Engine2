@@ -198,7 +198,7 @@ namespace Engine2.Entities
                 Transform.Translation = new FVector(Transform.Translation.x, newY);
             }
         }
-
+        public SweptAABBResult lastSweep;
         public override void UpdateObject()
         {
             FVector originalPos = Transform.Translation;
@@ -211,6 +211,7 @@ namespace Engine2.Entities
                 if (entity == this) continue;
 
                 SweptAABBResult sweep = SweptAABB(entity, Frame.deltaTime);
+                lastSweep = sweep;
 
                 if (sweep.Collision)
                 {
