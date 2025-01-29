@@ -1,6 +1,6 @@
 ﻿using Engine2.DataStructures;
-using Engine2.core.classes.objects.rendering;
-using Engine2.core.classes.objects;
+using Engine2.Rendering;
+using Engine2.Object;
 
 namespace Engine2.Entities
 {

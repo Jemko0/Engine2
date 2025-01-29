@@ -1,7 +1,7 @@
 ﻿using Engine2.core.classes.lookupTables;
 using Engine2.Entities;
 
-namespace Engine2.core.classes.objects.controller
+namespace Engine2.Object
 {
     public class EPlayerController : EObject
     {

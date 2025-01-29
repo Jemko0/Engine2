@@ -1,11 +1,6 @@
 ﻿using Engine2.core.interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Engine2.core.classes
+namespace Engine2.Object
 {
     /// <summary>
     /// Base Object, self registers but does not render, rendering objects are in <see cref="ERenderableObject"/>

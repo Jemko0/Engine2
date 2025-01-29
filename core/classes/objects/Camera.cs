@@ -1,7 +1,7 @@
 ﻿using Engine2.DataStructures;
 using Engine2.Entities;
 
-namespace Engine2.core.classes.objects
+namespace Engine2.Object
 {
     public class Camera : EObject
     {

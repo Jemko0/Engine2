@@ -1,13 +1,17 @@
 ﻿using Engine2.core.classes;
-using Engine2.core.classes.lookupTables;
 using Engine2.core.interfaces;
 using Engine2.DataStructures;
+using Engine2.Object;
 
 namespace Engine2.Entities
 {
+    /// <summary>
+    /// A Character is an <see cref="EEntity"/>
+    /// that can be controlled by a <see cref="EPlayerController"/>
+    /// </summary>
     public class ECharacter : EEntity, IInputInterface
     {
-        public FVector Velocity = new FVector(0f, 0);
+        public FVector Velocity;
 
         public ECharacter()
         {
@@ -21,8 +25,15 @@ namespace Engine2.Entities
 
         private (FVector Min, FVector Max) GetAABB()
         {
-            FVector min = Transform.Translation;
-            FVector max = Transform.Translation + Transform.Scale;
+            // For a top-left origin system, Y needs to be handled differently than X
+            FVector min = new FVector(
+                Transform.Translation.x,
+                Transform.Translation.y - Transform.Scale.y
+            );
+            FVector max = new FVector(
+                Transform.Translation.x + Transform.Scale.x,
+                Transform.Translation.y
+            );
             return (min, max);
         }
 

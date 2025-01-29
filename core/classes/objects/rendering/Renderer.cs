@@ -1,8 +1,8 @@
-﻿using System;
-using Engine2.core.interfaces;
+﻿using Engine2.core.interfaces;
 using Engine2.DataStructures;
+using Engine2.Object;
 
-namespace Engine2.core.classes.objects.rendering
+namespace Engine2.Rendering
 {
     public class Renderer : EObject
     {
@@ -32,8 +32,8 @@ namespace Engine2.core.classes.objects.rendering
         {
             Engine e = Program.getEngine();
             FTransform fTransform = new FTransform();
-            fTransform.Translation.x = rawPos.x - e.Camera.position.x + e.Width / 2;
-            fTransform.Translation.y = e.Camera.position.y - rawPos.y + e.Height / 2;
+            fTransform.Translation.x = (rawPos.x - e.Camera.position.x + e.Width / (2 * e.Camera.zoom)) * e.Camera.zoom;
+            fTransform.Translation.y = (e.Camera.position.y - rawPos.y + e.Height / 2) * e.Camera.zoom;
             fTransform.Angle = rawAngle;
             fTransform.Scale.x = rawScale.x * e.Camera.zoom;
             fTransform.Scale.y = rawScale.y * e.Camera.zoom;

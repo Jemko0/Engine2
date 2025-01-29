@@ -1,10 +1,9 @@
 using Engine2.core.classes;
 using Engine2.core.classes.lookupTables;
 using Engine2.core.classes.objects;
-using Engine2.core.classes.objects.controller;
-using Engine2.core.classes.objects.rendering;
+using Engine2.Object;
+using Engine2.Rendering;
 using Engine2.Entities;
-using Microsoft.VisualBasic.ApplicationServices;
 
 namespace Engine2
 {
@@ -36,18 +35,28 @@ namespace Engine2
         {
             Frame.StartDeltaCapture();
             objectManager.UpdateObjects();
+            UpdateDebugText();
             Invalidate();
-            axestxt.Text = string.Join(", ", heldKeys.ToArray());
-            FPSDisplay.Text = (Frame.deltaTime).ToString();
-            Thread.Sleep(8);
+            Thread.Sleep(1);
             Frame.EndDeltaCapture();
+        }
+
+        private void UpdateDebugText()
+        {
+            axestxt.Text = string.Join(", ", heldKeys.ToArray());
+            FPSDisplay.Text = "Delta: " + Frame.deltaTime.ToString() + "\n" + "FPS: " + Frame.fps.ToString();
         }
 
         private void EngineInit(object sender, EventArgs e)
         {
             //TEST PURPOSES
-            ECharacter char2 = new ECharacter();
-            EInstance.Create<ECharacter>(new ECharacter());
+            ECharacter char2 = EInstance.Create<ECharacter>(new ECharacter());
+            char2.Transform.Scale = new DataStructures.FVector(50, 40);
+            char2.Transform.Translation = new DataStructures.FVector(60, 0);
+
+            ECharacter char3 = EInstance.Create<ECharacter>(new ECharacter());
+            char3.Transform.Scale = new DataStructures.FVector(50, 50);
+            char3.Transform.Translation = new DataStructures.FVector(0, 0);
         }
 
         private void Engine_Paint(object sender, PaintEventArgs e)

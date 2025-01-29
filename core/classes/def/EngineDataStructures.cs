@@ -1,11 +1,5 @@
 ﻿using Engine2.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Engine2.DataStructures
 {
@@ -108,7 +102,8 @@ namespace Engine2.DataStructures
 
     public struct DeltaCaptureResult
     {
-        public float Delta;
+        public float DeltaMS;
+        public float DeltaS;
         public int FPS;
     }
     public struct SweptAABBResult
@@ -119,7 +114,7 @@ namespace Engine2.DataStructures
         public EEntity HitEntity;   // The entity we collided with
     }
 
-    public struct AxisMapping
+    public struct AxisMapping : IEquatable<AxisMapping>
     {
         public Keys key;
         public float value;
@@ -129,8 +124,14 @@ namespace Engine2.DataStructures
             this.key = key;
             this.value = value;
         }
+        #region constants
+        public static AxisMapping Empty => new AxisMapping(Keys.None, float.NaN);
+        #endregion
 
-        public static AxisMapping empty = new AxisMapping(Keys.None, float.NaN);
+        public bool Equals(AxisMapping other)
+        {
+            return other.key == key && other.value == value;
+        }
     }
 
 }

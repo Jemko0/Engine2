@@ -1,26 +1,28 @@
 ﻿using Engine2.DataStructures;
+using System.Diagnostics;
 
 namespace Engine2.core.classes
 {
     public static class Frame
     {
-        private static DateTime start;
-        private static DateTime end;
         public static float deltaTime;
         public static float fps;
+        static Stopwatch stopwatch = new Stopwatch();
+        static long lastTime = stopwatch.ElapsedMilliseconds;
         public static void StartDeltaCapture()
         {
-            start = DateTime.Now;
+            stopwatch.Start();
         }
 
         public static DeltaCaptureResult EndDeltaCapture()
         {
-            end = DateTime.Now;
+            long currentTime = stopwatch.ElapsedMilliseconds;
+            float tdeltaTime = (float)(currentTime - lastTime) / 1000; // Convert to seconds
+            lastTime = currentTime;
             DeltaCaptureResult result = new DeltaCaptureResult();
-            result.Delta = (float)(end - start).TotalMilliseconds;
-            result.FPS = (int)(1 / result.Delta);
-            deltaTime = result.Delta;
-            fps = result.FPS;
+            result.DeltaMS = (float)tdeltaTime;
+
+            deltaTime = result.DeltaMS;
             return result;
         }
     }

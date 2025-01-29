@@ -46,6 +46,7 @@
             // 
             axestxt.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             axestxt.AutoSize = true;
+            axestxt.FlatStyle = FlatStyle.Popup;
             axestxt.Location = new Point(375, 215);
             axestxt.Name = "axestxt";
             axestxt.Size = new Size(40, 20);

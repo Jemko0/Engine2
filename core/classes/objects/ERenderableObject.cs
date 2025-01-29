@@ -1,6 +1,6 @@
 ﻿using Engine2.core.interfaces;
 
-namespace Engine2.core.classes.objects
+namespace Engine2.Object
 {
     public class ERenderableObject : EObject, IObjectRenderInterface
     {

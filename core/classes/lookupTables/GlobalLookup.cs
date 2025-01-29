@@ -66,7 +66,7 @@ namespace Engine2.core.classes.lookupTables
                         }
                     }
                 }
-                return AxisMapping.empty;
+                return AxisMapping.Empty;
             }
 
             internal static AxisMapping? FindKeyValueInAxis(Keys key, List<AxisMapping> axes)
