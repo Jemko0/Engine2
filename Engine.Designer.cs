@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             FPSDisplay = new Label();
+            axestxt = new Label();
             SuspendLayout();
             // 
             // FPSDisplay
@@ -41,17 +42,29 @@
             FPSDisplay.TabIndex = 0;
             FPSDisplay.Text = "label1";
             // 
+            // axestxt
+            // 
+            axestxt.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            axestxt.AutoSize = true;
+            axestxt.Location = new Point(375, 215);
+            axestxt.Name = "axestxt";
+            axestxt.Size = new Size(40, 20);
+            axestxt.TabIndex = 1;
+            axestxt.Text = "Axes";
+            // 
             // Engine
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(axestxt);
             Controls.Add(FPSDisplay);
             DoubleBuffered = true;
             Name = "Engine";
             Text = "Form1";
             Load += EngineInit;
             Paint += Engine_Paint;
+            KeyUp += Engine_KeyUp;
             PreviewKeyDown += Engine_PreviewKeyDown;
             ResumeLayout(false);
             PerformLayout();
@@ -60,5 +73,6 @@
         #endregion
 
         private Label FPSDisplay;
+        private Label axestxt;
     }
 }

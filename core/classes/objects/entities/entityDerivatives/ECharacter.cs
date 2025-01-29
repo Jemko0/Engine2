@@ -1,4 +1,5 @@
 ﻿using Engine2.core.classes;
+using Engine2.core.classes.lookupTables;
 using Engine2.core.interfaces;
 using Engine2.DataStructures;
 
@@ -25,8 +26,6 @@ namespace Engine2.Entities
             return (min, max);
         }
 
-
-        // Perform swept AABB collision test against another entity
         private SweptAABBResult SweptAABB(ECharacter other, float deltaTime)
         {
             SweptAABBResult result = new SweptAABBResult
@@ -37,22 +36,18 @@ namespace Engine2.Entities
                 HitEntity = null
             };
 
-            // Get the AABBs for both entities
             var (myMin, myMax) = GetAABB();
             var (otherMin, otherMax) = other.GetAABB();
 
-            // Calculate relative velocity
             FVector relativeVel = Velocity * deltaTime;
 
-            // Early exit if there's no relative movement
             if (relativeVel.x == 0 && relativeVel.y == 0)
                 return result;
 
-            // Calculate inverse of velocity to avoid division
+            // Calculate entry and exit times
             FVector invEntry = new FVector();
             FVector invExit = new FVector();
 
-            // Calculate distance to collision entry and exit for each axis
             CalculateEntryExitTimes(
                 myMin, myMax, otherMin, otherMax,
                 relativeVel, ref invEntry, ref invExit);
@@ -65,33 +60,49 @@ namespace Engine2.Entities
             if (entryTime > exitTime || entryTime > 1.0f || entryTime < 0.0f)
                 return result;
 
-            // We have a collision! Set up the result
+            // if collision
             result.Collision = true;
             result.CollisionTime = entryTime;
             result.HitEntity = other;
 
-            // Calculate the normal of the collision
+            // Calculate the normal based on which axis had the later entry time
+            // AND direction of approach
             if (invEntry.x > invEntry.y)
             {
-                result.Normal = new FVector(relativeVel.x < 0 ? 1 : -1, 0);
+                // X-axis collision
+                if (myMin.x < otherMin.x)
+                {
+                    result.Normal = new FVector(1, 0); // Colliding from left
+                }
+                else
+                {
+                    result.Normal = new FVector(-1, 0); // Colliding from right
+                }
             }
             else
             {
-                result.Normal = new FVector(0, relativeVel.y < 0 ? 1 : -1);
+                // Y-axis collision
+                if (myMin.y < otherMin.y)
+                {
+                    result.Normal = new FVector(0, 1); // Colliding from bottom
+                }
+                else
+                {
+                    result.Normal = new FVector(0, -1); // Colliding from top
+                }
             }
 
             return result;
         }
 
-        // Helper function to calculate entry and exit times
         private void CalculateEntryExitTimes(
-            FVector myMin, FVector myMax,
-            FVector otherMin, FVector otherMax,
-            FVector relativeVel,
-            ref FVector invEntry,
-            ref FVector invExit)
+    FVector myMin, FVector myMax,
+    FVector otherMin, FVector otherMax,
+    FVector relativeVel,
+    ref FVector invEntry,
+    ref FVector invExit)
         {
-            // X-axis calculations
+            // X axis
             if (relativeVel.x > 0)
             {
                 invEntry.x = (otherMin.x - myMax.x) / relativeVel.x;
@@ -104,11 +115,22 @@ namespace Engine2.Entities
             }
             else
             {
-                invEntry.x = float.MinValue;
-                invExit.x = float.MaxValue;
+                // When velocity == 0, check if objects overlap on this axis
+                if (myMax.x <= otherMin.x || myMin.x >= otherMax.x)
+                {
+                    // No coll no overlap
+                    invEntry.x = float.MaxValue;
+                    invExit.x = float.MinValue;
+                }
+                else
+                {
+                    // obj overlap on this axis
+                    invEntry.x = float.MinValue;
+                    invExit.x = float.MaxValue;
+                }
             }
 
-            // Y-axis calculations
+            // Y-axisisisis
             if (relativeVel.y > 0)
             {
                 invEntry.y = (otherMin.y - myMax.y) / relativeVel.y;
@@ -121,21 +143,58 @@ namespace Engine2.Entities
             }
             else
             {
-                invEntry.y = float.MinValue;
-                invExit.y = float.MaxValue;
+                // When velocity is 0, check if objects overlap on this axis
+                if (myMax.y <= otherMin.y || myMin.y >= otherMax.y)
+                {
+                    // No overlap, no collision possible
+                    invEntry.y = float.MaxValue;
+                    invExit.y = float.MinValue;
+                }
+                else
+                {
+                    // Objects overlap on this axis
+                    invEntry.y = float.MinValue;
+                    invExit.y = float.MaxValue;
+                }
+            }
+        }
+
+        private void AlignWithCollisionSurface(ECharacter other, FVector normal)
+        {
+            var (myMin, myMax) = GetAABB();
+            var (otherMin, otherMax) = other.GetAABB();
+
+            const float EPSILON = 0.001f;
+
+            if (normal.x > 0)
+            {
+                float newX = otherMin.x - Transform.Scale.x - EPSILON;
+                Transform.Translation = new FVector(newX, Transform.Translation.y);
+            }
+            else if (normal.x < 0)
+            {
+                float newX = otherMax.x + EPSILON;
+                Transform.Translation = new FVector(newX, Transform.Translation.y);
+            }
+            else if (normal.y > 0)
+            {
+                float newY = otherMin.y - Transform.Scale.y - EPSILON;
+                Transform.Translation = new FVector(Transform.Translation.x, newY);
+            }
+            else if (normal.y < 0)
+            {
+                float newY = otherMax.y + EPSILON;
+                Transform.Translation = new FVector(Transform.Translation.x, newY);
             }
         }
 
         public override void UpdateObject()
         {
-            // Store the original position
             FVector originalPos = Transform.Translation;
 
-            // First, update position as normal
-            Transform.Translation += Velocity * Frame.deltaTime;
-            base.UpdateObject();
+            // intended movement
+            FVector movement = Velocity * Frame.deltaTime;
 
-            // Check for collisions with all other entities
             foreach (ECharacter entity in ObjectManager.renderingObjects)
             {
                 if (entity == this) continue;
@@ -144,24 +203,34 @@ namespace Engine2.Entities
 
                 if (sweep.Collision)
                 {
-                    // Move to point of collision
+                    // Move only up to the collision
                     Transform.Translation = originalPos + Velocity * Frame.deltaTime * sweep.CollisionTime;
 
-                    // Calculate slide response
+                    // Calculate slide vector
                     FVector remainingTime = Velocity * Frame.deltaTime * (1.0f - sweep.CollisionTime);
-                    FVector reflection = remainingTime - 2 * FVector.Dot(remainingTime, sweep.Normal) * sweep.Normal;
+                    FVector slideVector = remainingTime - FVector.Dot(remainingTime, sweep.Normal) * sweep.Normal;
 
-                    // Apply sliding motion
-                    Transform.Translation += reflection;
-
-                    // Optionally modify velocity for future updates
+                    // Update velocity for future frames (before applying slide)
                     Velocity = ReflectVelocity(sweep.Normal);
-                    break;
+
+                    // Test if sliding would cause another collision
+                    Transform.Translation += slideVector;
+                    var slideCollision = SweptAABB(entity, Frame.deltaTime * (1.0f - sweep.CollisionTime));
+
+                    if (slideCollision.Collision)
+                    {
+                        Transform.Translation = originalPos + Velocity * Frame.deltaTime * sweep.CollisionTime;
+                    }
+
+                    return;
                 }
             }
+
+            // If no collision, complete movement
+            Transform.Translation = originalPos + movement;
+            base.UpdateObject();
         }
 
-        // Helper function to reflect velocity off a surface
         private FVector ReflectVelocity(FVector normal)
         {
             // For a bounce effect:
@@ -171,14 +240,12 @@ namespace Engine2.Entities
             return Velocity - FVector.Dot(Velocity, normal) * normal;
         }
 
-        public virtual void AxisInput(string id, FVector axisVal)
+        public virtual void AxisInput(AxisMapping axis)
         {
-            throw new NotImplementedException();
         }
 
         public virtual void KeyInput(Keys keyVal)
         {
-            throw new NotImplementedException();
         }
     }
 }

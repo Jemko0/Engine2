@@ -12,7 +12,7 @@ namespace Engine2.Entities
     {
         public FTransform Transform = new FTransform();
         public bool rendering = true;
-
+        public SolidBrush brush = new SolidBrush(Color.Red);
         public EEntity() : base()
         {
             Transform.Translation = new FVector(0.0f, 0.0f);
@@ -21,7 +21,6 @@ namespace Engine2.Entities
 
         public override void Render(Graphics g)
         {
-            SolidBrush brush = new SolidBrush(Color.Red);
             if(rendering)
             {
                 FTransform RenderTransform;

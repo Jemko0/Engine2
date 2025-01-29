@@ -4,6 +4,7 @@ using Engine2.core.classes.objects;
 using Engine2.core.classes.objects.controller;
 using Engine2.core.classes.objects.rendering;
 using Engine2.Entities;
+using Microsoft.VisualBasic.ApplicationServices;
 
 namespace Engine2
 {
@@ -11,9 +12,10 @@ namespace Engine2
     {
         private ObjectManager objectManager = new ObjectManager();
         private Renderer Renderer = new();
-        public static Camera? Camera;
+        public Camera? Camera;
         public EPlayerController PlayerController;
         public List<Keys> heldKeys = new List<Keys>();
+
         public Engine()
         {
             InitializeComponent();
@@ -22,9 +24,12 @@ namespace Engine2
 
         public void Init()
         {
-            GlobalLookup.KeyMappingsLookup.Init();
+            Camera = new Camera();
+            GlobalLookup.KeyMappings.Init();
             PlayerController = new EPlayerController();
-            PlayerController.Posess(new ELocalPlayer());
+            ELocalPlayer ply = new ELocalPlayer();
+            PlayerController.Posess(ply);
+            Camera.SetTarget(ply);
         }
 
         private void TickEngine(object? sender, EventArgs e)
@@ -32,16 +37,14 @@ namespace Engine2
             Frame.StartDeltaCapture();
             objectManager.UpdateObjects();
             Invalidate();
-
+            axestxt.Text = string.Join(", ", heldKeys.ToArray());
             FPSDisplay.Text = (Frame.deltaTime).ToString();
-            Thread.Sleep(4);
+            Thread.Sleep(8);
             Frame.EndDeltaCapture();
         }
 
         private void EngineInit(object sender, EventArgs e)
         {
-            Camera = new();
-
             //TEST PURPOSES
             ECharacter char2 = new ECharacter();
             EInstance.Create<ECharacter>(new ECharacter());
@@ -54,6 +57,12 @@ namespace Engine2
 
         private void Engine_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
+            if (!heldKeys.Contains(e.KeyCode))
+            {
+                heldKeys.Add(e.KeyCode);
+            }
+            
+
             if (e.KeyCode == Keys.Escape)
             {
                 Application.Exit();
@@ -88,6 +97,11 @@ namespace Engine2
             {
                 Camera.zoom *= 0.9f;
             }
+        }
+
+        private void Engine_KeyUp(object sender, KeyEventArgs e)
+        {
+            heldKeys.Remove(e.KeyCode);
         }
     }
 }

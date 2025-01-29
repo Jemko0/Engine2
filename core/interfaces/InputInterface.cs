@@ -9,7 +9,7 @@ namespace Engine2.core.interfaces
 {
     public interface IInputInterface
     {
-        public void AxisInput(string id, FVector axisVal);
+        public void AxisInput(AxisMapping axis);
         public void KeyInput(Keys keyVal);
     }
 }

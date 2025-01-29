@@ -30,14 +30,15 @@ namespace Engine2.core.classes.objects.rendering
         /// </summary>
         public static FTransform GetTransformed(FVector rawPos, float rawAngle, FVector rawScale)
         {
+            Engine e = Program.getEngine();
             FTransform fTransform = new FTransform();
-            fTransform.Translation.x = rawPos.x - Engine.Camera.position.x;
-            fTransform.Translation.y = Engine.Camera.position.y - rawPos.y;
+            fTransform.Translation.x = rawPos.x - e.Camera.position.x + e.Width / 2;
+            fTransform.Translation.y = e.Camera.position.y - rawPos.y + e.Height / 2;
             fTransform.Angle = rawAngle;
-            fTransform.Scale.x = rawScale.x * Engine.Camera.zoom;
-            fTransform.Scale.y = rawScale.y * Engine.Camera.zoom;
+            fTransform.Scale.x = rawScale.x * e.Camera.zoom;
+            fTransform.Scale.y = rawScale.y * e.Camera.zoom;
 
-            float dpiScale = GetRenderDPIScale();
+            float dpiScale = 1.0f;
             //System.Diagnostics.Debug.Write("DPI: " + dpiScale);
             fTransform.ScaleTransform(dpiScale);
 

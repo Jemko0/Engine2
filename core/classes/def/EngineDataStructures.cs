@@ -41,7 +41,7 @@ namespace Engine2.DataStructures
         }
     }
 
-    public struct FVector : IAdditionOperators<FVector, FVector, FVector>, ISubtractionOperators<FVector, FVector, FVector>, IMultiplyOperators<FVector, FVector, FVector>, IMultiplyOperators<FVector, float, FVector>
+    public struct FVector : IAdditionOperators<FVector, FVector, FVector>, ISubtractionOperators<FVector, FVector, FVector>, IMultiplyOperators<FVector, FVector, FVector>, IMultiplyOperators<FVector, float, FVector>, IDivisionOperators<FVector, float, FVector>
     {
         public float x, y;
 
@@ -88,6 +88,13 @@ namespace Engine2.DataStructures
             return right;
         }
 
+        public static FVector operator /(FVector left, float right)
+        {
+            left.x /= right;
+            left.y /= right;
+            return left;
+        }
+
         public static float Dot(FVector a, FVector b)
         {
             return a.x * b.x + a.y * b.y;
@@ -111,4 +118,19 @@ namespace Engine2.DataStructures
         public FVector Normal;      // Normal of the collision surface
         public EEntity HitEntity;   // The entity we collided with
     }
+
+    public struct AxisMapping
+    {
+        public Keys key;
+        public float value;
+        
+        public AxisMapping(Keys key, float value)
+        {
+            this.key = key;
+            this.value = value;
+        }
+
+        public static AxisMapping empty = new AxisMapping(Keys.None, float.NaN);
+    }
+
 }
