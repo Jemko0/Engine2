@@ -1,4 +1,5 @@
-﻿using Engine2.core.interfaces;
+﻿using Engine2.core.classes;
+using Engine2.core.interfaces;
 
 namespace Engine2.Object
 {
@@ -42,10 +43,12 @@ namespace Engine2.Object
 
         public void UpdateObjects()
         {
+            Frame.StartCapture("objectUpdate");
             for (int i = 0; i < objects.Count; i++)
             {
                 objects[i].UpdateObject();
             }
+            Frame.EndCapture("objectUpdate");
         }
     }
 

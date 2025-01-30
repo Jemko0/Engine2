@@ -4,6 +4,12 @@ namespace Engine2.core.classes.lookupTables
 {
     public static class GlobalLookup
     {
+        public static void InitAll()
+        {
+            KeyMappings.Init();
+            TileLookup.Init();
+        }
+
         public static partial class KeyMappings
         {
             public static Dictionary<string, Keys> keyMappings = new Dictionary<string, Keys>();
@@ -91,6 +97,24 @@ namespace Engine2.core.classes.lookupTables
                 {
                     keyMappings.Add(mappingName, newKey);
                 }
+            }
+        }
+
+        public static class TileLookup
+        {
+            public static Dictionary<TileTypes, TileData> tileLookup = new Dictionary<TileTypes, TileData>();
+            public static TileData GetTileData(TileTypes type)
+            {
+                return tileLookup[type];
+            }
+            public static void Init()
+            {
+                AddTileDef(TileTypes.Dirt, new TileData("Dirt", true, "TileDirt"));
+            }
+
+            public static void AddTileDef(TileTypes t, TileData data)
+            {
+                tileLookup.Add(t, data);
             }
         }
     }

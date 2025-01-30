@@ -19,13 +19,13 @@ namespace Engine2
         {
             InitializeComponent();
             Application.Idle += TickEngine;
-            EWorld d = new EWorld(10);
+            EWorld d = new EWorld(10, 10);
         }
 
         public void Init()
         {
             Camera = new Camera();
-            GlobalLookup.KeyMappings.Init();
+            GlobalLookup.InitAll();
             PlayerController = new EPlayerController();
             ELocalPlayer ply = new ELocalPlayer();
             PlayerController.Posess(ply);
@@ -36,17 +36,26 @@ namespace Engine2
         {
             Frame.StartDeltaCapture();
             objectManager.UpdateObjects();
-            UpdateDebugText();
             Invalidate();
 #if !RELEASE
             Thread.Sleep(8);
 #endif
+            UpdateDebugText();
             Frame.EndDeltaCapture();
         }
 
         private void UpdateDebugText()
         {
-            axestxt.Text = string.Join(", ", heldKeys.ToArray());
+            Captures.Text = "";
+            foreach(var c in Frame.captures)
+            {
+                if(c.Key != "engineLoop")
+                {
+                    Captures.Text += c.Key + " | " + Frame.GetCapture(c.Key) + "\n";
+                }
+                
+            }
+            
             FPSDisplay.Text = "Delta: " + Frame.deltaTime.ToString() + "\n" + "FPS: " + ((int)Frame.fps).ToString();
         }
 

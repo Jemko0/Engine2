@@ -29,36 +29,36 @@
         private void InitializeComponent()
         {
             FPSDisplay = new Label();
-            axestxt = new Label();
+            Captures = new Label();
             SuspendLayout();
             // 
             // FPSDisplay
             // 
             FPSDisplay.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             FPSDisplay.AutoSize = true;
-            FPSDisplay.Location = new Point(710, 401);
+            FPSDisplay.Location = new Point(1812, 984);
             FPSDisplay.Name = "FPSDisplay";
             FPSDisplay.Size = new Size(50, 20);
             FPSDisplay.TabIndex = 0;
             FPSDisplay.Text = "label1";
             // 
-            // axestxt
+            // Captures
             // 
-            axestxt.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            axestxt.AutoSize = true;
-            axestxt.FlatStyle = FlatStyle.Popup;
-            axestxt.Location = new Point(375, 215);
-            axestxt.Name = "axestxt";
-            axestxt.Size = new Size(40, 20);
-            axestxt.TabIndex = 1;
-            axestxt.Text = "Axes";
+            Captures.Anchor = AnchorStyles.Left;
+            Captures.AutoSize = true;
+            Captures.FlatStyle = FlatStyle.Popup;
+            Captures.Location = new Point(49, 53);
+            Captures.Name = "Captures";
+            Captures.Size = new Size(40, 20);
+            Captures.TabIndex = 1;
+            Captures.Text = "Axes";
             // 
             // Engine
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
-            Controls.Add(axestxt);
+            ClientSize = new Size(1902, 1033);
+            Controls.Add(Captures);
             Controls.Add(FPSDisplay);
             DoubleBuffered = true;
             Name = "Engine";
@@ -74,6 +74,6 @@
         #endregion
 
         private Label FPSDisplay;
-        private Label axestxt;
+        private Label Captures;
     }
 }

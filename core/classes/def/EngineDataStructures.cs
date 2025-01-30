@@ -1,4 +1,5 @@
 ﻿using Engine2.Entities;
+using System.Diagnostics.Tracing;
 using System.Numerics;
 
 namespace Engine2.DataStructures
@@ -8,6 +9,13 @@ namespace Engine2.DataStructures
         public FVector Translation;
         public float Angle;
         public FVector Scale;
+
+        public FTransform(FVector Translation, FVector Scale)
+        {
+            this.Translation = Translation;
+            this.Scale = Scale;
+        }
+
 
         public void SetTranslation(float x, float y)
         {
@@ -154,6 +162,32 @@ namespace Engine2.DataStructures
     public struct Tile
     {
         public TileTypes type;
+
+        public Tile()
+        {
+
+        }
+
+        public Tile(TileTypes type)
+        {
+            this.type = type;
+        }
+
+        public static TileTypes None => TileTypes.None;
+    }
+
+    public struct TileData
+    {
+        public string displayName;
+        public bool tileCollide;
+        public Image tileSprite;
+
+        public TileData(string name, bool collision, string spriteName)
+        {
+            displayName = name;
+            tileCollide = collision;
+            tileSprite = (Bitmap)Properties.Resources.ResourceManager.GetObject(spriteName);
+        }
     }
     #endregion
 

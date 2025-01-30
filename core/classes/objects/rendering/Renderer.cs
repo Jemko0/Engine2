@@ -32,8 +32,8 @@ namespace Engine2.Rendering
         {
             Engine e = Program.getEngine();
             FTransform fTransform = new FTransform();
-            fTransform.Translation.x = (rawPos.x - e.Camera.position.x + e.Width / (2 * e.Camera.zoom)) * e.Camera.zoom;
-            fTransform.Translation.y = (e.Camera.position.y - rawPos.y + e.Height / 2) * e.Camera.zoom;
+            fTransform.Translation.x = rawPos.x - e.Camera.position.x + e.Width / (2 * e.Camera.zoom);
+            fTransform.Translation.y = e.Camera.position.y - rawPos.y + e.Height / (2 * e.Camera.zoom);
             fTransform.Angle = rawAngle;
             fTransform.Scale.x = rawScale.x * e.Camera.zoom;
             fTransform.Scale.y = rawScale.y * e.Camera.zoom;
@@ -43,6 +43,17 @@ namespace Engine2.Rendering
             fTransform.ScaleTransform(dpiScale);
 
             return fTransform;
+        }
+
+        public static FTransform GetTransformedTile(int x, int y)
+        {
+            Engine e = Program.getEngine();
+            float fx;
+            float fy;
+            fx = (float)(x * 32 - e.Camera.position.x + e.Width / (2 * e.Camera.zoom));
+            fy = (float)(e.Camera.position.y - y * 32 + e.Height / (2 * e.Camera.zoom));
+
+            return new FTransform(new FVector(fx * e.Camera.zoom, fy * e.Camera.zoom), new FVector(32 * e.Camera.zoom, 32 * e.Camera.zoom));
         }
 
         public static float GetRenderDPIScale()

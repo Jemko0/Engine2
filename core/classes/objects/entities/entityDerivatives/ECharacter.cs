@@ -26,14 +26,8 @@ namespace Engine2.Entities
         private (FVector Min, FVector Max) GetAABB()
         {
             // For a top-left origin system, Y needs to be handled differently than X
-            FVector min = new FVector(
-                Transform.Translation.x,
-                Transform.Translation.y - Transform.Scale.y
-            );
-            FVector max = new FVector(
-                Transform.Translation.x + Transform.Scale.x,
-                Transform.Translation.y
-            );
+            FVector min = new FVector(Transform.Translation.x, Transform.Translation.y - Transform.Scale.y);
+            FVector max = new FVector(Transform.Translation.x + Transform.Scale.x, Transform.Translation.y);
             return (min, max);
         }
 
