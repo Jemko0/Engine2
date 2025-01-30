@@ -45,6 +45,14 @@ namespace Engine2.Rendering
             return fTransform;
         }
 
+
+        /// <summary>
+        /// takes in a raw tile coord [0, 1] and converts it to world space coords
+        /// for rendering tiles
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public static FTransform GetTransformedTile(int x, int y)
         {
             Engine e = Program.getEngine();

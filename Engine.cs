@@ -19,7 +19,6 @@ namespace Engine2
         {
             InitializeComponent();
             Application.Idle += TickEngine;
-            EWorld d = new EWorld(10, 10);
         }
 
         public void Init()
@@ -30,6 +29,7 @@ namespace Engine2
             ELocalPlayer ply = new ELocalPlayer();
             PlayerController.Posess(ply);
             Camera.SetTarget(ply);
+            EWorld d = new EWorld(100, 100);
         }
 
         private void TickEngine(object? sender, EventArgs e)

@@ -35,34 +35,36 @@ namespace Engine2.core.classes
         static long captureLastTime;
         public static void StartCapture(string name)
         {
-            if(!captures.ContainsKey(name))
+#if DEBUG
+            if (!captures.ContainsKey(name))
             {
-                Stopwatch sw;
-                if (captures.ContainsKey(name))
+                if (!captures.ContainsKey(name))
                 {
-                    if(captures[name] == null)
-                    {
-                        sw = new Stopwatch();
-                        captures[name] = sw;
-                    }
-                    
+                    Stopwatch sw = new Stopwatch();
+                    captures.Add(name, sw);
                 }
-                captures[name].Restart();
-
             }
+            captures[name].Restart();
+#endif
         }
 
         public static double GetCapture(string name)
         {
+#if DEBUG
             return captureDeltas[name];
+#else
+            return 0;
+#endif
         }
 
         public static void EndCapture(string name)
         {
+#if DEBUG
             captures[name].Stop();
             long currentTime = captures[name].ElapsedMilliseconds;
-            double tdeltaTime = (float)(currentTime - captureLastTime) / 1000;
+            double tdeltaTime = (double)(currentTime - captureLastTime) / 1000;
             captureDeltas[name] = tdeltaTime;
+#endif
         }
     }
 }
