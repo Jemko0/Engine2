@@ -3,6 +3,7 @@ using Engine2.core.classes.lookupTables;
 using Engine2.Object;
 using Engine2.Rendering;
 using Engine2.Entities;
+using Engine2.DataStructures;
 using Engine2.World;
 
 namespace Engine2
@@ -29,7 +30,7 @@ namespace Engine2
             ELocalPlayer ply = new ELocalPlayer();
             PlayerController.Posess(ply);
             Camera.SetTarget(ply);
-            EWorld d = new EWorld(100, 100);
+            ObjectManager.CreateWorld(new IVector(100, 4));
         }
 
         private void TickEngine(object? sender, EventArgs e)
@@ -38,7 +39,7 @@ namespace Engine2
             objectManager.UpdateObjects();
             Invalidate();
 #if !RELEASE
-            Thread.Sleep(8);
+            Thread.Sleep(12);
 #endif
             UpdateDebugText();
             Frame.EndDeltaCapture();
@@ -65,7 +66,7 @@ namespace Engine2
             ECharacter char2 = EInstance.Create<ECharacter>(new ECharacter());
             char2.brush = new SolidBrush(Color.HotPink);
             char2.Transform.Scale = new DataStructures.FVector(500, 40);
-            char2.Transform.Translation = new DataStructures.FVector(-100, 0);
+            char2.Transform.Translation = new DataStructures.FVector(-100, 10);
 
             /*ECharacter char3 = EInstance.Create<ECharacter>(new ECharacter());
             char3.Transform.Scale = new DataStructures.FVector(50, 50);

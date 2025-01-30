@@ -43,7 +43,7 @@ namespace Engine2.DataStructures
         }
     }
 
-    public struct FVector : IAdditionOperators<FVector, FVector, FVector>, ISubtractionOperators<FVector, FVector, FVector>, IMultiplyOperators<FVector, FVector, FVector>, IMultiplyOperators<FVector, float, FVector>, IDivisionOperators<FVector, float, FVector>
+    public struct FVector : IAdditionOperators<FVector, FVector, FVector>, ISubtractionOperators<FVector, FVector, FVector>, IMultiplyOperators<FVector, FVector, FVector>, IMultiplyOperators<FVector, float, FVector>, IDivisionOperators<FVector, float, FVector>, IEquatable<FVector>, IEqualityOperators<FVector, FVector, bool>
     {
         public float x, y;
 
@@ -97,6 +97,16 @@ namespace Engine2.DataStructures
             return left;
         }
 
+        public static bool operator ==(FVector left, FVector right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(FVector left, FVector right)
+        {
+            return !left.Equals(right);
+        }
+
         public static float Dot(FVector a, FVector b)
         {
             return a.x * b.x + a.y * b.y;
@@ -105,6 +115,11 @@ namespace Engine2.DataStructures
         public float Dot(FVector other)
         {
             return x * other.x + y * other.y;
+        }
+
+        public bool Equals(FVector other)
+        {
+            return x == other.x && y == other.y;
         }
 
         public static FVector Zero => new FVector(0, 0);
