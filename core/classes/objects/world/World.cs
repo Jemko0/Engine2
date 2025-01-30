@@ -256,5 +256,23 @@ namespace Engine2.World
 
             return collidingTiles;
         }
+
+        public (int x, int y, bool valid) ScreenToTileIndices(int screenX, int screenY)
+        {
+            var engine = Program.getEngine();
+            
+            // Convert screen to world coordinates
+            float worldX = (screenX / cam.zoom) + cam.position.x - (engine.Width / (2 * cam.zoom));
+            float worldY = (-screenY / cam.zoom) + cam.position.y + (engine.Height / (2 * cam.zoom));
+            
+            // Convert world coordinates to tile indices
+            int tileX = (int)Math.Floor((worldX + TILE_SIZE/2) / TILE_SIZE);
+            int tileY = (int)Math.Floor((-worldY + TILE_SIZE/2) / TILE_SIZE);
+            
+            // Check if the coordinates are within bounds
+            bool valid = tileX >= 0 && tileX < worldSize.x && tileY >= 0 && tileY < worldSize.y;
+            
+            return (tileX, tileY, valid);
+        }
     }
 }

@@ -172,7 +172,8 @@ namespace Engine2.DataStructures
     public enum TileTypes
     {
         None = 0,
-        Dirt = 1,
+        Dirt,
+        Stone,
     }
     public struct Tile
     {

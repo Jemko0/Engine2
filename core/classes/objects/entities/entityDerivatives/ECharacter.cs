@@ -164,34 +164,6 @@ namespace Engine2.Entities
             }
         }
 
-        private void AlignWithCollisionSurface(ECharacter other, FVector normal)
-        {
-            var (myMin, myMax) = GetAABB();
-            var (otherMin, otherMax) = other.GetAABB();
-
-            const float EPSILON = 0.001f;
-
-            if (normal.x > 0)
-            {
-                float newX = otherMin.x - Transform.Scale.x - EPSILON;
-                Transform.Translation = new FVector(newX, Transform.Translation.y);
-            }
-            else if (normal.x < 0)
-            {
-                float newX = otherMax.x + EPSILON;
-                Transform.Translation = new FVector(newX, Transform.Translation.y);
-            }
-            else if (normal.y > 0)
-            {
-                float newY = otherMin.y - Transform.Scale.y - EPSILON;
-                Transform.Translation = new FVector(Transform.Translation.x, newY);
-            }
-            else if (normal.y < 0)
-            {
-                float newY = otherMax.y + EPSILON;
-                Transform.Translation = new FVector(Transform.Translation.x, newY);
-            }
-        }
         public SweptAABBResult lastSweep;
         public override void UpdateObject()
         {

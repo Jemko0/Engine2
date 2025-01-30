@@ -1,6 +1,8 @@
 ﻿using Engine2.core.classes.lookupTables;
 using Engine2.DataStructures;
+using Engine2.Object;
 using Engine2.Physics;
+using Engine2.Rendering;
 
 namespace Engine2.Entities
 {
@@ -12,6 +14,7 @@ namespace Engine2.Entities
             Transform.Translation = new FVector(0, 100);
             Transform.Scale = new FVector(20, 50);
             brush = new SolidBrush(Color.Blue);
+            Program.getEngine().MouseClick += ELocalPlayer_MouseClick;
         }
 
         public override void UpdateObject()
@@ -46,6 +49,10 @@ namespace Engine2.Entities
                     Jump();
                 }
             }
+            if (keyVal == Keys.Enter)
+            {
+                
+            }
 #if !RELEASE
             if (keyVal == Keys.G)
             {
@@ -53,6 +60,17 @@ namespace Engine2.Entities
                 Colliding = !debugMovement;
             }
 #endif
+        }
+
+        private void ELocalPlayer_MouseClick(object? sender, MouseEventArgs e)
+        {
+            var world = ObjectManager.GetWorld();
+            var (tileX, tileY, valid) = world.ScreenToTileIndices(e.X, e.Y);
+            
+            if (valid)
+            {
+                world.SetTile(tileX, tileY, TileTypes.Stone);
+            }
         }
     }
 }
