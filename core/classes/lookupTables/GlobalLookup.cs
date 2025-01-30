@@ -110,7 +110,7 @@ namespace Engine2.core.classes.lookupTables
             public static void Init()
             {
                 AddTileDef(TileTypes.Dirt, new TileData("Dirt", true, "TileDirt"));
-                AddTileDef(TileTypes.Stone, new TileData("Stone", true, "pelix"));
+                AddTileDef(TileTypes.Stone, new TileData("Stone", true, "TStone"));
             }
 
             public static void AddTileDef(TileTypes t, TileData data)
