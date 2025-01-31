@@ -2,6 +2,7 @@
 using Engine2.core.interfaces;
 using Engine2.DataStructures;
 using Engine2.Object;
+using System.Collections.Generic;
 
 namespace Engine2.Entities
 {
@@ -168,10 +169,12 @@ namespace Engine2.Entities
         public override void UpdateObject()
         {
             FVector originalPos = Transform.Translation;
-
-            // intended movement
             FVector movement = Velocity * Frame.deltaTime;
 
+            // Create a list to store all collisions
+            List<SweptAABBResult> collisions = new List<SweptAABBResult>();
+
+            // Collect all potential collisions
             for(int i = 0; i < ObjectManager.renderingObjects.Count; i++) 
             {
                 ECharacter entity = ObjectManager.renderingObjects[i] as ECharacter;
@@ -180,35 +183,53 @@ namespace Engine2.Entities
                 if (entity == this) continue;
 
                 SweptAABBResult sweep = SweptAABB(entity, Frame.deltaTime);
-                lastSweep = sweep;
+                lastSweep = sweep; // Keep the last sweep for debugging
                 if (!Colliding) break;
+                
                 if (sweep.Collision)
                 {
-                    // Move only up to the collision
-                    Transform.Translation = originalPos + Velocity * Frame.deltaTime * sweep.CollisionTime;
-
-                    // Calculate slide vector
-                    FVector remainingTime = Velocity * Frame.deltaTime * (1.0f - sweep.CollisionTime);
-                    FVector slideVector = remainingTime - FVector.Dot(remainingTime, sweep.Normal) * sweep.Normal;
-
-                    // Update velocity for future frames (before applying slide)
-                    Velocity = ReflectVelocity(sweep.Normal);
-
-                    // Test if sliding would cause another collision
-                    Transform.Translation += slideVector;
-                    var slideCollision = SweptAABB(entity, Frame.deltaTime * (1.0f - sweep.CollisionTime));
-
-                    if (slideCollision.Collision)
-                    {
-                        Transform.Translation = originalPos + Velocity * Frame.deltaTime * sweep.CollisionTime;
-                    }
-
-                    return;
+                    collisions.Add(sweep);
                 }
             }
 
-            // If no collision, complete movement
-            Transform.Translation = originalPos + movement;
+            if (collisions.Count == 0)
+            {
+                // If no collisions, complete movement
+                Transform.Translation = originalPos + movement;
+                base.UpdateObject();
+                return;
+            }
+
+            // Sort collisions by collision time (earliest first)
+            collisions.Sort((a, b) => a.CollisionTime.CompareTo(b.CollisionTime));
+
+            // Handle each collision sequentially
+            float remainingTime = Frame.deltaTime;
+            FVector currentPos = originalPos;
+
+            foreach (var collision in collisions)
+            {
+                // Move to collision point
+                float timeToCollision = collision.CollisionTime * remainingTime;
+                currentPos += Velocity * timeToCollision;
+
+                // Calculate sliding velocity
+                Velocity = ReflectVelocity(collision.Normal);
+                
+                // Update remaining time
+                remainingTime -= timeToCollision;
+                if (remainingTime <= 0) break;
+            }
+
+            // Apply any remaining movement after all collisions
+            if (remainingTime > 0)
+            {
+                currentPos += Velocity * remainingTime;
+            }
+
+            // Set final position
+            Transform.Translation = currentPos;
+
             base.UpdateObject();
         }
 

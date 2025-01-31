@@ -68,9 +68,9 @@ namespace Engine2
             char2.Transform.Scale = new DataStructures.FVector(500, 40);
             char2.Transform.Translation = new DataStructures.FVector(-100, 10);
 
-            /*ECharacter char3 = EInstance.Create<ECharacter>(new ECharacter());
+            ECharacter char3 = EInstance.Create<ECharacter>(new ECharacter());
             char3.Transform.Scale = new DataStructures.FVector(50, 50);
-            char3.Transform.Translation = new DataStructures.FVector(0, 0);*/
+            char3.Transform.Translation = new DataStructures.FVector(0, 50);
         }
 
         private void Engine_Paint(object sender, PaintEventArgs e)

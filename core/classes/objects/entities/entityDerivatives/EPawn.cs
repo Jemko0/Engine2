@@ -11,6 +11,7 @@ namespace Engine2.Entities
         public float jumpPower = 500f;
         protected float LR;
         protected float UD;
+        protected bool isGrounded = false;
 
         /// <summary>
         /// A Pawn has basic Movement functionality that is ready to be implemented in
@@ -24,13 +25,24 @@ namespace Engine2.Entities
 
         public override void UpdateObject()
         {
+            // Check if we're grounded based on collision normal
+            isGrounded = false;
+            if (lastSweep.Collision && lastSweep.Normal.y < 0)
+            {
+                isGrounded = true;
+            }
+
             Movement();
             base.UpdateObject();
         }
 
         public virtual void Movement()
         {
-            Velocity.y -= GlobalPhysics.g;
+            // Only apply gravity if we're not grounded
+            if (!isGrounded)
+            {
+                Velocity.y -= GlobalPhysics.g;
+            }
 
             if (LR == 0.0f && UD == 0.0f)
             {
@@ -44,7 +56,11 @@ namespace Engine2.Entities
 
         public virtual void Jump()
         {
-            Velocity.y = jumpPower;
+            if (isGrounded)
+            {
+                Velocity.y = jumpPower;
+                isGrounded = false;
+            }
         }
     }
 }
