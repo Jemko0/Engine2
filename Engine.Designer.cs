@@ -62,7 +62,7 @@
             Controls.Add(FPSDisplay);
             DoubleBuffered = true;
             Name = "Engine";
-            Text = "Form1";
+            Text = "Engine2";
             Load += EngineInit;
             Paint += Engine_Paint;
             KeyUp += Engine_KeyUp;

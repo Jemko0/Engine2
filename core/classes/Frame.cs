@@ -38,11 +38,8 @@ namespace Engine2.core.classes
 #if DEBUG
             if (!captures.ContainsKey(name))
             {
-                if (!captures.ContainsKey(name))
-                {
-                    Stopwatch sw = new Stopwatch();
-                    captures.Add(name, sw);
-                }
+                Stopwatch sw = new Stopwatch();
+                captures.Add(name, sw);
             }
             captures[name].Restart();
 #endif
@@ -51,9 +48,13 @@ namespace Engine2.core.classes
         public static double GetCapture(string name)
         {
 #if DEBUG
-            return captureDeltas[name];
+            if(captureDeltas.ContainsKey(name))
+            {
+                return captureDeltas[name];
+            }
+            return -1;
 #else
-            return 0;
+            return -1;
 #endif
         }
 

@@ -165,6 +165,7 @@ namespace Engine2.Entities
         public SweptAABBResult lastSweep;
         public override void UpdateObject()
         {
+            Frame.StartCapture("CharacterCollisionChecks");
             FVector originalPos = Transform.Translation;
             FVector movement = Velocity * Frame.deltaTime;
 
@@ -218,6 +219,7 @@ namespace Engine2.Entities
             Transform.Translation = currentPos;
 
             base.UpdateObject();
+            Frame.EndCapture("CharacterCollisionChecks");
         }
 
         private FVector ReflectVelocity(FVector normal)

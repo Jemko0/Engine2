@@ -75,7 +75,9 @@ namespace Engine2
 
         private void Engine_Paint(object sender, PaintEventArgs e)
         {
+            Frame.StartCapture("Engine_Paint()");
             Renderer.RenderFrame(e);
+            Frame.EndCapture("Engine_Paint()");
         }
 
         private void Engine_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
