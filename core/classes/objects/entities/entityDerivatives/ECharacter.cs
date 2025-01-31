@@ -24,7 +24,7 @@ namespace Engine2.Entities
             Transform.Scale = new FVector(50.0f, 50.0f);
         }
 
-        private (FVector Min, FVector Max) GetAABB()
+        protected (FVector Min, FVector Max) GetAABB()
         {
             // For a top-left origin system, Y needs to be handled differently than X
             FVector min = new FVector(Transform.Translation.x, Transform.Translation.y - Transform.Scale.y);
@@ -32,7 +32,7 @@ namespace Engine2.Entities
             return (min, max);
         }
 
-        private SweptAABBResult SweptAABB(ECharacter other, float deltaTime)
+        protected SweptAABBResult SweptAABB(ECharacter other, float deltaTime)
         {
             SweptAABBResult result = new SweptAABBResult
             {
@@ -149,16 +149,13 @@ namespace Engine2.Entities
             }
             else
             {
-                // When velocity is 0, check if objects overlap on this axis
                 if (myMax.y <= otherMin.y || myMin.y >= otherMax.y)
                 {
-                    // No overlap, no collision possible
                     invEntry.y = float.MaxValue;
                     invExit.y = float.MinValue;
                 }
                 else
                 {
-                    // Objects overlap on this axis
                     invEntry.y = float.MinValue;
                     invExit.y = float.MaxValue;
                 }
@@ -171,10 +168,8 @@ namespace Engine2.Entities
             FVector originalPos = Transform.Translation;
             FVector movement = Velocity * Frame.deltaTime;
 
-            // Create a list to store all collisions
             List<SweptAABBResult> collisions = new List<SweptAABBResult>();
 
-            // Collect all potential collisions
             for(int i = 0; i < ObjectManager.renderingObjects.Count; i++) 
             {
                 ECharacter entity = ObjectManager.renderingObjects[i] as ECharacter;
@@ -183,7 +178,7 @@ namespace Engine2.Entities
                 if (entity == this) continue;
 
                 SweptAABBResult sweep = SweptAABB(entity, Frame.deltaTime);
-                lastSweep = sweep; // Keep the last sweep for debugging
+                lastSweep = sweep; // Keep last sweep for debugging
                 if (!Colliding) break;
                 
                 if (sweep.Collision)
@@ -194,40 +189,32 @@ namespace Engine2.Entities
 
             if (collisions.Count == 0)
             {
-                // If no collisions, complete movement
                 Transform.Translation = originalPos + movement;
                 base.UpdateObject();
                 return;
             }
 
-            // Sort collisions by collision time (earliest first)
             collisions.Sort((a, b) => a.CollisionTime.CompareTo(b.CollisionTime));
 
-            // Handle each collision sequentially
             float remainingTime = Frame.deltaTime;
             FVector currentPos = originalPos;
 
             foreach (var collision in collisions)
             {
-                // Move to collision point
                 float timeToCollision = collision.CollisionTime * remainingTime;
                 currentPos += Velocity * timeToCollision;
 
-                // Calculate sliding velocity
                 Velocity = ReflectVelocity(collision.Normal);
                 
-                // Update remaining time
                 remainingTime -= timeToCollision;
                 if (remainingTime <= 0) break;
             }
 
-            // Apply any remaining movement after all collisions
             if (remainingTime > 0)
             {
                 currentPos += Velocity * remainingTime;
             }
 
-            // Set final position
             Transform.Translation = currentPos;
 
             base.UpdateObject();

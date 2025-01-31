@@ -44,10 +44,7 @@ namespace Engine2.Entities
         {
             if (keyVal == Keys.Space)
             {
-                if(lastSweep.Collision)
-                {
-                    Jump();
-                }
+                Jump();
             }
             if (keyVal == Keys.Enter)
             {
@@ -69,7 +66,7 @@ namespace Engine2.Entities
             
             if (valid)
             {
-                world.SetTile(tileX, tileY, TileTypes.Stone);
+                world.SetTile(tileX, tileY, TileTypes.None);
             }
         }
     }
